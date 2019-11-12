@@ -1,7 +1,6 @@
 import math
 
-
-divisors_dict = dict()
+prime_divisors_dict = dict()
 
 
 def is_prime(n):
@@ -12,31 +11,26 @@ def is_prime(n):
     return True
 
 
+def save_prime_divisors(n):
+    divisors = set()
+    for divisor in range(2, round(n / 2) + 1):  # can be optimized somehow
+        if n % divisor == 0 and is_prime(divisor):
+            divisors.add(divisor)
+    prime_divisors_dict[n] = divisors
+
+
 def phi(n):
     assert n > 1, "phi: N must be > 1, but was %i" % n
 
-    res = 0
-    for m in range(1, n):
+    save_prime_divisors(n)
+    res = 1
+    for m in range(2, n):
         rel_prime = True
 
-        if m != 1 and n % m == 0:
-            rel_prime = False
-        elif m in divisors_dict.keys():
-            for divisor in divisors_dict[m]:
-                if n % divisor == 0 or n % (m / divisor) == 0:
-                    rel_prime = False
-                    break
-        else:
-            divisors_dict[m] = set()
-            for divisor in range(2, round(m/2) + 1):
-                if m % divisor == 0:
-                    divisor_2 = int(m / divisor)
-                    divisors_dict[m].add(divisor)
-                    divisors_dict[m].add(divisor_2)
-
-                    if n % divisor == 0 or n % divisor_2 == 0:
-                        rel_prime = False
-                        break
+        for divisor in prime_divisors_dict[m]:
+            if divisor in prime_divisors_dict[n]:
+                rel_prime = False
+                break
 
         if rel_prime:
             res += 1
