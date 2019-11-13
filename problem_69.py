@@ -1,5 +1,6 @@
-from main import phi
+from main import get_primes
 import time
+import math
 
 
 # https://projecteuler.net/problem=69
@@ -22,19 +23,47 @@ import time
 # It can be seen that n=6 produces a maximum n/φ(n) for n ≤ 10.
 # Find the value of n ≤ 1,000,000 for which n/φ(n) is a maximum.
 
+N_MAX = 1000000
+
 start_time = time.time()
-max_n_phi = 0
-n_for_max_n_phi = 0
-n_min = 2
-n_max = 10000
+primes = get_primes(int(math.sqrt(N_MAX)))
 
-for k in range(n_min, n_max + 1):
-    n_phi = k / phi(k)
-    print(k, n_phi)
-    if n_phi > max_n_phi:
-        max_n_phi = n_phi
-        n_for_max_n_phi = k
 
-print("---- answer: max_n_phi = %i for n = %i ----" % (max_n_phi, n_for_max_n_phi))
+def get_n_to_divisors_dict(max_n):
+    result_dict = dict()
+    for p in primes:
+        for n in range(p, max_n+1, p):
+            if n in result_dict.keys():
+                result_dict[n].add(p)
+            else:
+                result_dict[n] = {p}
+    return result_dict
 
-print("---- %s seconds ----" % (time.time() - start_time))
+
+def phi(n):
+    assert n > 1, "phi: N must be > 1, but was %i" % n
+
+    ms = [1] * (n - 1)
+    for divisor in n_to_divisors_dict[n]:
+        for pointer in range(divisor, n, divisor):
+            ms[pointer-1] = 0
+    return sum(ms)
+
+
+print("---- 1: %s seconds ----" % (time.time() - start_time))
+n_to_divisors_dict = get_n_to_divisors_dict(N_MAX)
+print("---- 2: %s seconds ----" % (time.time() - start_time))
+
+
+num = 1
+for p in sorted(primes):
+    new_num = num * p
+    if new_num > N_MAX:
+        break
+    num = new_num
+
+n_phi_num = num / phi(num)
+
+print("---- answer: max_n_phi = %i for n = %i ----" % (n_phi_num, num))
+
+print("---- 3: %s seconds ----" % (time.time() - start_time))
