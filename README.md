@@ -4,4 +4,5 @@
 
 My attempts
 
+- [x] [Problem 1](https://projecteuler.net/problem=1)
 - [x] [Problem 69](https://projecteuler.net/problem=69)
