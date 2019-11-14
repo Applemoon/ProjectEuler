@@ -15,3 +15,19 @@ def get_primes(max_prime):
         if is_prime(i):
             primes.add(i)
     return primes
+
+
+def get_fibonacci_sequence(n):
+    a = 1
+    b = 2
+    sequence = list((a, b))
+    while True:
+        c = a + b
+        if c < n:
+            sequence.append(c)
+            a = b
+            b = c
+        else:
+            break
+
+    return sequence
