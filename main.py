@@ -31,3 +31,13 @@ def get_fibonacci_sequence(n):
             break
 
     return sequence
+
+
+def is_palindromic(n):
+    n_str = str(n)
+    digits = len(n_str)
+    result = True
+    for i in range(int(digits/2)):
+        if n_str[i] != n_str[digits - i - 1]:
+            result = False
+    return result
